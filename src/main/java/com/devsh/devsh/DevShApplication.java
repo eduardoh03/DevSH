@@ -1,4 +1,4 @@
-package com.example.devsh;
+package com.devsh.devsh;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

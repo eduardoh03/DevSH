@@ -1,10 +1,10 @@
-package com.example.devsh.services;
+package com.devsh.devsh.services;
 
-import com.example.devsh.dto.ProfileDto;
-import com.example.devsh.entities.Profile;
-import com.example.devsh.repositories.ProfileRepository;
+import com.devsh.devsh.dto.ProfileDto;
+import com.devsh.devsh.entities.Profile;
+import com.devsh.devsh.repositories.ProfileRepository;
+import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
 
-import com.example.devsh.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package com.example.devsh.controller;
+package com.devsh.devsh.controller;
 
-import com.example.devsh.dto.ProfileDto;
-import com.example.devsh.services.ProfileService;
+import com.devsh.devsh.dto.ProfileDto;
+import com.devsh.devsh.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

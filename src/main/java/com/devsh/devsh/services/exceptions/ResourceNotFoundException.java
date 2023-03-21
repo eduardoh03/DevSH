@@ -1,4 +1,4 @@
-package com.example.devsh.services.exceptions;
+package com.devsh.devsh.services.exceptions;
 
 import java.io.Serial;
 

@@ -1,4 +1,4 @@
-package com.example.devsh.entities;
+package com.devsh.devsh.entities;
 
 import jakarta.persistence.*;
 

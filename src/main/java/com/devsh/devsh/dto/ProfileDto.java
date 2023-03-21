@@ -1,6 +1,6 @@
-package com.example.devsh.dto;
+package com.devsh.devsh.dto;
 
-import com.example.devsh.entities.Profile;
+import com.devsh.devsh.entities.Profile;
 
 import java.io.Serial;
 import java.io.Serializable;

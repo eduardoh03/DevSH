@@ -1,4 +1,4 @@
-package com.example.devsh.controller.exceptions;
+package com.devsh.devsh.controller.exceptions;
 
 import java.io.Serial;
 import java.io.Serializable;

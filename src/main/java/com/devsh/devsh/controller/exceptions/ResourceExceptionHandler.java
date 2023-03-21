@@ -1,7 +1,7 @@
-package com.example.devsh.controller.exceptions;
+package com.devsh.devsh.controller.exceptions;
 
-import com.example.devsh.services.exceptions.EmptyResultDataAccessException;
-import com.example.devsh.services.exceptions.ResourceNotFoundException;
+import com.devsh.devsh.services.exceptions.EmptyResultDataAccessException;
+import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 
 @ControllerAdvice
