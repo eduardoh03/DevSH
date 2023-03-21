@@ -58,9 +58,9 @@ public class ProfileService {
     }
 
     private void copyDtoToEntity(ProfileDTO dto, Profile entity) {
-        entity.setName(dto.getName());
-        entity.setEmail(dto.getEmail());
-        entity.setPassword(dto.getPassword());
-        entity.setImgUrl(dto.getImgUrl());
+        entity.setName(dto.getName() != null ? dto.getName() : entity.getName());
+        entity.setEmail(dto.getEmail() != null ? dto.getEmail() : entity.getEmail());
+        entity.setPassword(dto.getPassword() != null ? dto.getPassword() : entity.getPassword());
+        entity.setImgUrl(dto.getImgUrl() != null ? dto.getImgUrl() : entity.getImgUrl());
     }
 }
