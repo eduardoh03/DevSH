@@ -1,7 +1,5 @@
 package com.devsh.devsh.dto;
 
-import com.devsh.devsh.entities.Profile;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -9,31 +7,31 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class ProfileDto implements Serializable {
+public class ProfileDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private Long id;
-    @NotNull @NotEmpty(message = "Name cannot be empty")
+    @NotNull
+    @NotEmpty(message = "Name cannot be empty")
     private String name;
-    @NotNull @NotEmpty(message = "Password cannot be empty")
+    @NotNull
+    @NotEmpty(message = "Password cannot be empty")
     private String password;
-    @Email @NotNull @NotEmpty(message = "Email cannot be empty")
+    @Email
+    @NotNull
+    @NotEmpty(message = "Email cannot be empty")
     private String email;
+    private String imgUrl;
 
-    public ProfileDto() {
+    public ProfileDTO() {
     }
 
-    public ProfileDto(Long id, String name, String password, String email) {
+    public ProfileDTO(Long id, String name, String password, String email, String imgUrl) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
-    }
-    public ProfileDto(Profile profile) {
-        this.id = profile.getId();
-        this.name = profile.getName();
-        this.password = profile.getPassword();
-        this.email = profile.getEmail();
+        this.imgUrl = imgUrl;
     }
 
     public Long getId() {
@@ -66,5 +64,13 @@ public class ProfileDto implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
