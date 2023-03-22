@@ -1,6 +1,8 @@
 package com.devsh.devsh.controller;
 
 import com.devsh.devsh.dto.UserDTO;
+import com.devsh.devsh.entities.User;
+import com.devsh.devsh.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,13 @@ public class AuthController {
     @Autowired
     private AuthenticationManager manager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping
     public ResponseEntity doLogin(@RequestBody @Valid UserDTO userDTO) {
         var token = new UsernamePasswordAuthenticationToken(userDTO.login(), userDTO.password());
         var authentication = manager.authenticate(token);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(tokenService.gerarToken((User) authentication.getPrincipal()));
     }
 }
