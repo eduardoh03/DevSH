@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 @Entity
+@Table(name = "profiles")
 public class Profile implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -17,7 +18,6 @@ public class Profile implements Serializable {
     private String name;
     private String password;
     private String email;
-
     private String imgUrl;
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
