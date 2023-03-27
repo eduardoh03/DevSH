@@ -20,7 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfigurations {
     @Autowired
     private SecurityFilter securityFilter;
+    private static final String[] PUBLIC_MATCHERS_GET = {
+            "/profile/**"
 
+    };
     //Disable CSRF
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -28,6 +31,7 @@ public class SecurityConfigurations {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().exceptionHandling().and().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                .requestMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
                 //.requestMatchers(HttpMethod.DELETE, "/profiles").hasRole("ADMIN") //Forma de filtrar por papel de usuario. A outra, linha comentada @EnableMethodSecurity
                 .anyRequest().authenticated()
                 .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
