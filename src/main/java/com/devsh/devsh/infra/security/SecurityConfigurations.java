@@ -24,7 +24,8 @@ public class SecurityConfigurations {
             "/h2-console/**"
     };
     private static final String[] PUBLIC_MATCHERS_GET = {
-            "/profile/**"
+            "/profile/**",
+            "/user/**"
     };
     private static final String[] PUBLIC_MATCHERS_POST = {
             "/login",
