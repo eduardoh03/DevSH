@@ -1,4 +1,5 @@
 package com.devsh.devsh.dto;
 
-public record TokenJWTDTO(String token) {
+public record TokenJWTDTO (String type, String token, Long user_id){
+
 }

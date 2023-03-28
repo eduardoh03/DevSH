@@ -1,13 +1,18 @@
 package com.devsh.devsh.controller;
 
+import com.devsh.devsh.dto.TokenJWTDTO;
 import com.devsh.devsh.dto.UserDTO;
 import com.devsh.devsh.entities.User;
 import com.devsh.devsh.infra.security.TokenService;
+import com.devsh.devsh.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +27,27 @@ public class AuthController {
 
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity doLogin(@RequestBody @Valid UserDTO userDTO) {
-        var token = new UsernamePasswordAuthenticationToken(userDTO.login(), userDTO.password());
-        var authentication = manager.authenticate(token);
-        var tokenJWT = tokenService.gerarToken((User) authentication.getPrincipal());
-        return ResponseEntity.ok(tokenJWT);
+    public ResponseEntity<TokenJWTDTO> doLogin(@RequestBody @Valid UserDTO userDTO) {
+        UserDetails db_user = userRepository.findByLogin(userDTO.getLogin());
+
+        boolean isAuthenticated = BCrypt.checkpw(userDTO.getPassword(), db_user.getPassword());
+
+        if (isAuthenticated) {
+            var token = new UsernamePasswordAuthenticationToken(userDTO.getLogin(), userDTO.getPassword());
+            try {
+                var authentication = manager.authenticate(token);
+                String tokenJWT = tokenService.gerarToken((User) authentication.getPrincipal());
+                return ResponseEntity.ok(new TokenJWTDTO("Bearer ", tokenJWT, ((User) authentication.getPrincipal()).getId()));
+            } catch (AuthenticationException e) {
+                return ResponseEntity.badRequest().build();
+            }
+        }else{
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 }
