@@ -24,7 +24,7 @@ public class ProfileService {
     public ProfileDTO findById(Long id) {
         Optional<Profile> obj = repository.findById(id);
         Profile entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not Found."));
-        return new ProfileDTO(entity.getId(), entity.getName(), entity.getPassword(), entity.getEmail(), entity.getImgUrl());
+        return new ProfileDTO(entity.getId(), entity.getName(), entity.getImgUrl());
     }
 
     @Transactional
@@ -32,7 +32,7 @@ public class ProfileService {
         Profile entity = new Profile();
         copyDtoToEntity(dto, entity);
         entity = repository.save(entity);
-        return new ProfileDTO(entity.getId(), entity.getName(), entity.getPassword(), entity.getEmail(), entity.getImgUrl());
+        return new ProfileDTO(entity.getId(), entity.getName(), entity.getImgUrl());
     }
 
     @Transactional
@@ -41,7 +41,7 @@ public class ProfileService {
             Profile entity = repository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
             entity = repository.save(entity);
-            return new ProfileDTO(entity.getId(), entity.getName(), entity.getPassword(), entity.getEmail(), entity.getImgUrl());
+            return new ProfileDTO(entity.getId(), entity.getName(), entity.getImgUrl());
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Id (" + id + ") not found.");
         }
@@ -59,8 +59,6 @@ public class ProfileService {
 
     private void copyDtoToEntity(ProfileDTO dto, Profile entity) {
         entity.setName(dto.getName() != null ? dto.getName() : entity.getName());
-        entity.setEmail(dto.getEmail() != null ? dto.getEmail() : entity.getEmail());
-        entity.setPassword(dto.getPassword() != null ? dto.getPassword() : entity.getPassword());
         entity.setImgUrl(dto.getImgUrl() != null ? dto.getImgUrl() : entity.getImgUrl());
     }
 }
