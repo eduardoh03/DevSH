@@ -27,7 +27,7 @@ class DevShApplicationTests {
     public void testFindById() {
         // Arrange
         Long id = 1L;
-        Profile profile = new Profile(id, "John Doe", "password", "johndoe@example.com", "http://example.com/img.jpg");
+        Profile profile = new Profile(id, "John Doe", "http://example.com/img.jpg");
         when(repository.findById(id)).thenReturn(Optional.of(profile));
 
         // Act
@@ -36,8 +36,6 @@ class DevShApplicationTests {
         // Assert
         assertEquals(profile.getId(), result.getId());
         assertEquals(profile.getName(), result.getName());
-        assertEquals(profile.getPassword(), result.getPassword());
-        assertEquals(profile.getEmail(), result.getEmail());
         assertEquals(profile.getImgUrl(), result.getImgUrl());
 
         verify(repository, times(1)).findById(id);
@@ -45,8 +43,8 @@ class DevShApplicationTests {
     @Test
     public void shouldInsertProfile() {
         // Arrange
-        ProfileDTO dto = new ProfileDTO(null, "John Doe", "password", "johndoe@email.com", "http://imageurl.com");
-        Profile profile = new Profile(1L, dto.getName(), dto.getPassword(), dto.getEmail(), dto.getImgUrl());
+        ProfileDTO dto = new ProfileDTO(null, "John Doe", "http://imageurl.com");
+        Profile profile = new Profile(1L, dto.getName(), dto.getImgUrl());
         when(repository.save(any(Profile.class))).thenReturn(profile);
 
         // Act
@@ -55,8 +53,6 @@ class DevShApplicationTests {
         // Assert
         assertNotNull(result.getId());
         assertEquals(dto.getName(), result.getName());
-        assertEquals(dto.getPassword(), result.getPassword());
-        assertEquals(dto.getEmail(), result.getEmail());
         assertEquals(dto.getImgUrl(), result.getImgUrl());
         verify(repository, times(1)).save(any(Profile.class));
     }
