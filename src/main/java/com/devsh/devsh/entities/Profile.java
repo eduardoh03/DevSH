@@ -1,7 +1,6 @@
 package com.devsh.devsh.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
 
 import java.io.Serial;
 import java.io.Serializable;

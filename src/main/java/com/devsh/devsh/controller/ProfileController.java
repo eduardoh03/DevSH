@@ -5,6 +5,7 @@ import com.devsh.devsh.dto.UserDTO;
 import com.devsh.devsh.services.ProfileService;
 import com.devsh.devsh.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -28,9 +29,14 @@ public class ProfileController {
 
     @PostMapping
     public ResponseEntity<ProfileDTO> insert(@RequestBody ProfileDTO dto) {
+
         UserDTO userDTO = dto.getUser();
-        userDTO = userService.insert(userDTO);
-        dto = service.insert(dto, userDTO.getId());
+        try {
+            userDTO = userService.insert(userDTO);
+            dto = service.insert(dto, userDTO.getId());
+        }catch (DataIntegrityViolationException e){
+            throw new IllegalArgumentException("Username invalid or already registered!");
+        }
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
     }

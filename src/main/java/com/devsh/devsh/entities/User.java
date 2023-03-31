@@ -1,6 +1,7 @@
 package com.devsh.devsh.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(unique = true)
+    @Email @NotNull @NotBlank @NotEmpty
     private String login;
     @NotNull @NotBlank @NotEmpty
     private String password;
