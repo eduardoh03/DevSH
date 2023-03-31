@@ -1,6 +1,7 @@
 package com.devsh.devsh.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,6 +18,10 @@ public class Profile implements Serializable {
     private Long id;
     private String name;
     private String imgUrl;
+
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name="user_id", referencedColumnName = "id")
+    private User user;
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant createdAt;
@@ -63,6 +68,14 @@ public class Profile implements Serializable {
 
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @PrePersist

@@ -48,7 +48,7 @@ class DevShApplicationTests {
         when(repository.save(any(Profile.class))).thenReturn(profile);
 
         // Act
-        ProfileDTO result = service.insert(dto);
+        ProfileDTO result = service.insert(dto, 0);
 
         // Assert
         assertNotNull(result.getId());
