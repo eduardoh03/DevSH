@@ -1,7 +1,4 @@
 package com.devsh.devsh.dto;
-
-import com.devsh.devsh.entities.User;
-
 import java.io.Serial;
 import java.io.Serializable;
 

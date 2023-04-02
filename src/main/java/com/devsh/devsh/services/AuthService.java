@@ -1,7 +1,5 @@
 package com.devsh.devsh.services;
 
-import com.devsh.devsh.entities.User;
-import com.devsh.devsh.repositories.ProfileRepository;
 import com.devsh.devsh.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

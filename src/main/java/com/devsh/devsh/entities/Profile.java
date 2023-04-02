@@ -4,8 +4,12 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Instant;
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "profiles")
@@ -22,11 +26,14 @@ public class Profile implements Serializable {
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant createdAt;
+    @OneToMany
+    Set<Notification> notifications  = new HashSet<>();
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant updatedAt;
+    private Timestamp createdAt;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Timestamp updatedAt;
 
     public Profile() {
     }
@@ -61,11 +68,11 @@ public class Profile implements Serializable {
         this.imgUrl = imgUrl;
     }
 
-    public Instant getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public Instant getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
@@ -79,12 +86,14 @@ public class Profile implements Serializable {
 
     @PrePersist
     public void prePersist() {
-        createdAt = Instant.now();
+        OffsetDateTime dateTime = OffsetDateTime.now();
+        createdAt = Timestamp.valueOf(dateTime.atZoneSameInstant(ZoneId.of("Z")).toLocalDateTime());
     }
 
     @PreUpdate
     public void preUpdate() {
-        updatedAt = Instant.now();
+        OffsetDateTime dateTime = OffsetDateTime.now();
+        updatedAt = Timestamp.valueOf(dateTime.atZoneSameInstant(ZoneId.of("Z")).toLocalDateTime());
     }
 
     @Override
