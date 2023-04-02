@@ -2,7 +2,9 @@ package com.devsh.devsh.services;
 
 import com.devsh.devsh.dto.ProfileDTO;
 import com.devsh.devsh.entities.Profile;
+import com.devsh.devsh.entities.User;
 import com.devsh.devsh.repositories.ProfileRepository;
+import com.devsh.devsh.repositories.UserRepository;
 import com.devsh.devsh.services.exceptions.DatabaseException;
 import com.devsh.devsh.services.exceptions.EmptyResultDataAccessException;
 import com.devsh.devsh.services.exceptions.EntityNotFoundException;
@@ -20,6 +22,9 @@ public class ProfileService {
     @Autowired
     private ProfileRepository repository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Transactional(readOnly = true)
     public ProfileDTO findById(Long id) {
         Optional<Profile> obj = repository.findById(id);
@@ -28,9 +33,10 @@ public class ProfileService {
     }
 
     @Transactional
-    public ProfileDTO insert(ProfileDTO dto) {
+    public ProfileDTO insert(ProfileDTO dto, long userId) {
         Profile entity = new Profile();
         copyDtoToEntity(dto, entity);
+        entity.setUser(new User(userId, null, null));
         entity = repository.save(entity);
         return new ProfileDTO(entity.getId(), entity.getName(), entity.getImgUrl());
     }

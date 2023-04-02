@@ -1,8 +1,11 @@
 package com.devsh.devsh.controller;
 
 import com.devsh.devsh.dto.ProfileDTO;
+import com.devsh.devsh.dto.UserDTO;
 import com.devsh.devsh.services.ProfileService;
+import com.devsh.devsh.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,6 +18,9 @@ public class ProfileController {
     @Autowired
     private ProfileService service;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProfileDTO> findById(@PathVariable Long id) {
         ProfileDTO dto = service.findById(id);
@@ -23,7 +29,14 @@ public class ProfileController {
 
     @PostMapping
     public ResponseEntity<ProfileDTO> insert(@RequestBody ProfileDTO dto) {
-        dto = service.insert(dto);
+
+        UserDTO userDTO = dto.getUser();
+        try {
+            userDTO = userService.insert(userDTO);
+            dto = service.insert(dto, userDTO.getId());
+        }catch (DataIntegrityViolationException e){
+            throw new IllegalArgumentException("Username invalid or already registered!");
+        }
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
     }
