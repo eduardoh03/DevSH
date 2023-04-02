@@ -26,7 +26,7 @@ public class Profile implements Serializable {
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "profile")
     Set<Notification> notifications  = new HashSet<>();
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
