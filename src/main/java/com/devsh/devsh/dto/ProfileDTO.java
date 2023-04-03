@@ -26,6 +26,10 @@ public class ProfileDTO implements Serializable {
         this.user = user;
     }
 
+    public ProfileDTO(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

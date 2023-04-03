@@ -1,7 +1,9 @@
 package com.devsh.devsh.services;
 
 import com.devsh.devsh.dto.NotificationDTO;
+import com.devsh.devsh.dto.ProfileDTO;
 import com.devsh.devsh.entities.Notification;
+import com.devsh.devsh.entities.Profile;
 import com.devsh.devsh.repositories.NotificationRepository;
 import com.devsh.devsh.services.exceptions.DatabaseException;
 import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
@@ -20,8 +22,8 @@ public class NotificationService {
     @Transactional(readOnly = true)
     public Page<NotificationDTO> findAllPaged(PageRequest pageRequest) {
         Page<Notification> list = repository.findAll(pageRequest);
-        //TODO Return all paged
-        return null;
+        return list.map(x -> new NotificationDTO(x.getId(), x.getTitle(), x.getMessage(), x.getCreatedAt().toInstant(),
+                x.getRead()));
     }
 
     @Transactional(readOnly = true)
@@ -35,8 +37,11 @@ public class NotificationService {
     @Transactional
     public NotificationDTO insert(NotificationDTO dto) {
         Notification entity = new Notification();
-        //TODO CREATE
-        return null;
+        copyDtoToEntity(dto, entity);
+        entity = repository.save(entity);
+        ProfileDTO profileDTO = new ProfileDTO(entity.getProfile().getId());
+        return new NotificationDTO(entity.getId(), entity.getTitle(), entity.getMessage(),
+                entity.getCreatedAt().toInstant(), entity.getRead(), profileDTO);
     }
 
     @Transactional
@@ -56,5 +61,8 @@ public class NotificationService {
         entity.setTitle(dto.getTitle());
         entity.setMessage(dto.getMessage());
         entity.setRead(dto.getRead());
+        Profile profile = new Profile();
+        profile.setId(dto.getProfile().getId());
+        entity.setProfile(profile);
     }
 }

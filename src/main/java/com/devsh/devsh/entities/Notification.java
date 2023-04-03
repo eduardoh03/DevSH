@@ -15,6 +15,9 @@ public class Notification {
     private String message;
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Timestamp createdAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Timestamp readAt;
+
     private Boolean read;
 
     @ManyToOne
@@ -77,12 +80,27 @@ public class Notification {
         createdAt = Timestamp.valueOf(dateTime.atZoneSameInstant(ZoneId.of("Z")).toLocalDateTime());
     }
 
+    @PreUpdate
+    public void preUpdate() {
+        OffsetDateTime dateTime = OffsetDateTime.now();
+        readAt = Timestamp.valueOf(dateTime.atZoneSameInstant(ZoneId.of("Z")).toLocalDateTime());
+    }
+
+
     public Boolean getRead() {
         return read;
     }
 
     public void setRead(Boolean read) {
         this.read = read;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     @Override

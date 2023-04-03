@@ -1,4 +1,7 @@
 package com.devsh.devsh.dto;
+import com.devsh.devsh.entities.Notification;
+import org.aspectj.weaver.ast.Not;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
@@ -22,6 +25,15 @@ public class NotificationDTO implements Serializable {
         this.message = message;
         this.createdAt = createdAt;
         this.read = read;
+    }
+
+    public NotificationDTO(Long id, String title, String message, Instant createdAt, Boolean read, ProfileDTO profile) {
+        this.id = id;
+        this.title = title;
+        this.message = message;
+        this.createdAt = createdAt;
+        this.read = read;
+        this.profile = profile;
     }
 
     public Long getId() {
@@ -62,5 +74,13 @@ public class NotificationDTO implements Serializable {
 
     public void setRead(Boolean read) {
         this.read = read;
+    }
+
+    public ProfileDTO getProfile() {
+        return profile;
+    }
+
+    public void setProfile(ProfileDTO profile) {
+        this.profile = profile;
     }
 }
