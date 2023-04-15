@@ -1,61 +1,62 @@
 package com.devsh.devsh.services;
 
-import com.devsh.devsh.entities.Profile;
 import com.devsh.devsh.repositories.ProfileRepository;
+import com.devsh.devsh.services.exceptions.DatabaseException;
 import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import static org.mockito.Mockito.*;
-
-import java.util.Optional;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import com.devsh.devsh.dto.ProfileDTO;
+import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
 class ProfileServiceTest {
-
-    @Mock
-    private ProfileRepository profileRepository;
+    private long existingId;
+    private long nonExistingId;
+    private long dependentId;
 
     @InjectMocks
-    private ProfileService profileService;
+    private ProfileService service;
+    @Mock
+    private ProfileRepository repository;
 
     @BeforeEach
     void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        existingId = 1L;
+        nonExistingId = 1000L;
+        dependentId = 4L;
+
+        Mockito.doNothing().when(repository).deleteById(existingId);
+        Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(nonExistingId);
+        Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
     }
 
     @Test
-    void testFindById() {
-        // Given
-        Long id = 1L;
-        Profile profile = new Profile();
-        profile.setId(id);
-        profile.setName("John Doe");
-        when(profileRepository.findById(id)).thenReturn(Optional.of(profile));
-
-        // When
-        ProfileDTO result = profileService.findById(id);
-
-        // Then
-        assertEquals(profile.getName(), result.getName());
-        assertEquals(profile.getId(), result.getId());
-    }
-
-    @Test
-    void testFindByIdNotFound() {
-        // Given
-        Long id = 1L;
-        when(profileRepository.findById(id)).thenReturn(Optional.empty());
-
-        // When/Then
-        assertThrows(ResourceNotFoundException.class, () -> {
-            profileService.findById(id);
+    public void deleteShouldDoNothingWhenIdExists(){
+        Assertions.assertDoesNotThrow(() -> {
+            service.delete(existingId);
         });
+        Mockito.verify(repository, Mockito.times(1)).deleteById(existingId);
+    }
+
+    @Test
+    public void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExists(){
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            service.delete(nonExistingId);
+        });
+        Mockito.verify(repository, Mockito.times(1)).deleteById(nonExistingId);
+    }
+
+    @Test
+    public void deleteShouldThrowDatabaseExceptionWhenDependentId(){
+        Assertions.assertThrows(DatabaseException.class, () -> {
+            service.delete(dependentId);
+        });
+        Mockito.verify(repository, Mockito.times(1)).deleteById(dependentId);
     }
 }
