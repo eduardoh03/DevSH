@@ -5,11 +5,13 @@ import com.devsh.devsh.dto.ProfileDTO;
 import com.devsh.devsh.entities.Profile;
 import com.devsh.devsh.repositories.ProfileRepository;
 import com.devsh.devsh.services.exceptions.DatabaseException;
+import com.devsh.devsh.services.exceptions.EntityNotFoundException;
 import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -25,7 +27,7 @@ class ProfileServiceTest {
     private long nonExistingId;
     private long dependentId;
     private Profile profile;
-
+    private ProfileDTO profileDTO;
 
     @InjectMocks
     private ProfileService service;
@@ -39,9 +41,15 @@ class ProfileServiceTest {
         dependentId = 4L;
 
         profile = Factory.createProfile();
+        profileDTO = Factory.createProfileDTO();
 
         Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(profile));
         Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
+
+        Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(profile);
+
+        Mockito.when(repository.getReferenceById(existingId)).thenReturn(profile);
+        Mockito.when(repository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
 
         Mockito.doNothing().when(repository).deleteById(existingId);
         Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(nonExistingId);
@@ -61,6 +69,32 @@ class ProfileServiceTest {
             service.findById(nonExistingId);
         });
         Mockito.verify(repository, Mockito.times(1)).findById(nonExistingId);
+    }
+
+    @Test
+    public void updateShouldReturnProfileDTOWhenIdExists(){
+        ProfileDTO result = service.update(existingId, profileDTO);
+
+        Assertions.assertNotNull(result);
+
+        Mockito.verify(repository, Mockito.times(1)).getReferenceById(existingId);
+
+        Mockito.verify(repository, Mockito.times(1)).save(profile);
+    }
+
+    @Test
+    public void updateShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist(){
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            service.update(nonExistingId, profileDTO);
+        });
+
+        Mockito.verify(repository, Mockito.times(1)).getReferenceById(nonExistingId);
+    }
+
+    @Test
+    public void saveShouldReturnProfileDTOWhenInsert(){
+        ProfileDTO result = service.insert(profileDTO, profileDTO.getUser().getId());
+        Assertions.assertNotNull(result);
     }
 
     @Test
