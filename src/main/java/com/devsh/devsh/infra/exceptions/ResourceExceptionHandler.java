@@ -2,6 +2,7 @@ package com.devsh.devsh.infra.exceptions;
 
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.devsh.devsh.services.exceptions.AuthorizationErrorException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -95,6 +96,18 @@ public class ResourceExceptionHandler {
         err.setStatus(status.value());
         err.setError("Access Denied");
         err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(AuthorizationErrorException.class)
+    public ResponseEntity<StandardError> unauthorized(AuthorizationErrorException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        StandardError err = new StandardError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(status.value());
+        err.setError("Authentication Error.");
+        err.setMessage("Email or Password Incorrect.");
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
