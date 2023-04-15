@@ -1,4 +1,4 @@
-package com.devsh.devsh.services;
+package com.devsh.devsh.infra.services;
 
 import com.devsh.devsh.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthService implements UserDetailsService {
+public class AuthSecurityService implements UserDetailsService {
     @Autowired
     private UserRepository repository;
 

@@ -26,7 +26,6 @@ public class UserDTO implements Serializable {
     public UserDTO(Long id, String login) {
         this.id = id;
         this.login = login;
-
     }
 
     public UserDTO(User entity) {

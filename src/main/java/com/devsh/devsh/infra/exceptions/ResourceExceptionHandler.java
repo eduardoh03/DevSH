@@ -2,7 +2,8 @@ package com.devsh.devsh.infra.exceptions;
 
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.devsh.devsh.services.exceptions.EmptyResultDataAccessException;
+import com.devsh.devsh.services.exceptions.AuthorizationErrorException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,12 +14,12 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class ResourceExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<StandardError> entityNotFound(ResourceNotFoundException e, HttpServletRequest request) {
@@ -95,6 +96,18 @@ public class ResourceExceptionHandler {
         err.setStatus(status.value());
         err.setError("Access Denied");
         err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(AuthorizationErrorException.class)
+    public ResponseEntity<StandardError> unauthorized(AuthorizationErrorException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        StandardError err = new StandardError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(status.value());
+        err.setError("Authentication Error.");
+        err.setMessage("Email or Password Incorrect.");
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }

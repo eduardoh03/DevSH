@@ -29,6 +29,10 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user")
     private Profile profile;
 
+    public Profile getProfile() {
+        return profile;
+    }
+
     public User() {
     }
 

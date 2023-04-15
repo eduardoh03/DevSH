@@ -17,7 +17,6 @@ import java.net.URI;
 public class ProfileController {
     @Autowired
     private ProfileService service;
-
     @Autowired
     private UserService userService;
 
@@ -34,7 +33,7 @@ public class ProfileController {
         try {
             userDTO = userService.insert(userDTO);
             dto = service.insert(dto, userDTO.getId());
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e){
             throw new IllegalArgumentException("Username invalid or already registered!");
         }
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(dto.getId()).toUri();
