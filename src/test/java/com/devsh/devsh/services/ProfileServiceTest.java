@@ -1,5 +1,8 @@
 package com.devsh.devsh.services;
 
+import com.devsh.devsh.Factory;
+import com.devsh.devsh.dto.ProfileDTO;
+import com.devsh.devsh.entities.Profile;
 import com.devsh.devsh.repositories.ProfileRepository;
 import com.devsh.devsh.services.exceptions.DatabaseException;
 import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
@@ -14,11 +17,15 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 @ExtendWith(SpringExtension.class)
 class ProfileServiceTest {
     private long existingId;
     private long nonExistingId;
     private long dependentId;
+    private Profile profile;
+
 
     @InjectMocks
     private ProfileService service;
@@ -31,9 +38,29 @@ class ProfileServiceTest {
         nonExistingId = 1000L;
         dependentId = 4L;
 
+        profile = Factory.createProfile();
+
+        Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(profile));
+        Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
+
         Mockito.doNothing().when(repository).deleteById(existingId);
         Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(nonExistingId);
         Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
+    }
+
+    @Test
+    public void findByIdShouldReturnProfileDTOWhenIdExists(){
+        ProfileDTO result = service.findById(existingId);
+        Assertions.assertNotNull(result);
+        Mockito.verify(repository, Mockito.times(1)).findById(existingId);
+    }
+
+    @Test
+    public void findByIdShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist(){
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            service.findById(nonExistingId);
+        });
+        Mockito.verify(repository, Mockito.times(1)).findById(nonExistingId);
     }
 
     @Test
