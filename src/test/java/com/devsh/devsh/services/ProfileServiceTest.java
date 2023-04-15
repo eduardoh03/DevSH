@@ -3,7 +3,9 @@ package com.devsh.devsh.services;
 import com.devsh.devsh.Factory;
 import com.devsh.devsh.dto.ProfileDTO;
 import com.devsh.devsh.entities.Profile;
+import com.devsh.devsh.entities.User;
 import com.devsh.devsh.repositories.ProfileRepository;
+import com.devsh.devsh.repositories.UserRepository;
 import com.devsh.devsh.services.exceptions.DatabaseException;
 import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -28,11 +30,15 @@ class ProfileServiceTest {
     private long dependentId;
     private Profile profile;
     private ProfileDTO profileDTO;
+    private User user;
 
     @InjectMocks
     private ProfileService service;
     @Mock
     private ProfileRepository repository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -41,6 +47,7 @@ class ProfileServiceTest {
         dependentId = 4L;
 
         profile = Factory.createProfile();
+        user = Factory.createUser();
         profileDTO = Factory.createProfileDTO();
 
         Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(profile));
@@ -50,6 +57,8 @@ class ProfileServiceTest {
 
         Mockito.when(repository.getReferenceById(existingId)).thenReturn(profile);
         Mockito.when(repository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
+
+        Mockito.when(userRepository.getReferenceById(existingId)).thenReturn(user);
 
         Mockito.doNothing().when(repository).deleteById(existingId);
         Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(nonExistingId);
