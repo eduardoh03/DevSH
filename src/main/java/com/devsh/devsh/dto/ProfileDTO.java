@@ -1,7 +1,4 @@
 package com.devsh.devsh.dto;
-
-import com.devsh.devsh.entities.User;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -27,6 +24,10 @@ public class ProfileDTO implements Serializable {
         this.name = name;
         this.imgUrl = imgUrl;
         this.user = user;
+    }
+
+    public ProfileDTO(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

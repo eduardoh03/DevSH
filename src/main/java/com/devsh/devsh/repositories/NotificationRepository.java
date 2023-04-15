@@ -1,10 +1,10 @@
 package com.devsh.devsh.repositories;
 
-import com.devsh.devsh.entities.Profile;
+import com.devsh.devsh.entities.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProfileRepository extends JpaRepository<Profile, Long> {
+public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
 }

@@ -1,8 +1,6 @@
 package com.devsh.devsh.controller;
 
-import com.devsh.devsh.dto.ProfileDTO;
 import com.devsh.devsh.dto.UserDTO;
-import com.devsh.devsh.services.ProfileService;
 import com.devsh.devsh.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
