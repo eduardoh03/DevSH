@@ -10,7 +10,7 @@ import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
@@ -20,8 +20,8 @@ public class NotificationService {
     @Autowired
     private NotificationRepository repository;
     @Transactional(readOnly = true)
-    public Page<NotificationDTO> findAllPaged(PageRequest pageRequest) {
-        Page<Notification> list = repository.findAll(pageRequest);
+    public Page<NotificationDTO> findAllPaged(Pageable pageable) {
+        Page<Notification> list = repository.findAll(pageable);
         return list.map(x -> new NotificationDTO(x.getId(), x.getTitle(), x.getMessage(), x.getCreatedAt().toInstant(),
                 x.getRead()));
     }
