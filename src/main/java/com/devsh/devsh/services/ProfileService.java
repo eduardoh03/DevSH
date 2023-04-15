@@ -6,8 +6,8 @@ import com.devsh.devsh.entities.User;
 import com.devsh.devsh.repositories.ProfileRepository;
 import com.devsh.devsh.repositories.UserRepository;
 import com.devsh.devsh.services.exceptions.DatabaseException;
-import com.devsh.devsh.services.exceptions.EmptyResultDataAccessException;
-import com.devsh.devsh.services.exceptions.EntityNotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import jakarta.persistence.EntityNotFoundException;
 import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
