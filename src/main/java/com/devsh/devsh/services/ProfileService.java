@@ -2,7 +2,6 @@ package com.devsh.devsh.services;
 
 import com.devsh.devsh.dto.ProfileDTO;
 import com.devsh.devsh.entities.Profile;
-import com.devsh.devsh.entities.User;
 import com.devsh.devsh.repositories.ProfileRepository;
 import com.devsh.devsh.repositories.UserRepository;
 import com.devsh.devsh.services.exceptions.DatabaseException;
@@ -36,7 +35,7 @@ public class ProfileService {
     public ProfileDTO insert(ProfileDTO dto, long userId) {
         Profile entity = new Profile();
         copyDtoToEntity(dto, entity);
-        entity.setUser(new User(userId, null, null));
+        entity.setUser(userRepository.getReferenceById(userId));
         entity = repository.save(entity);
         return new ProfileDTO(entity);
     }
@@ -47,7 +46,7 @@ public class ProfileService {
             Profile entity = repository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
             entity = repository.save(entity);
-            return new ProfileDTO(entity.getId(), entity.getName(), entity.getImgUrl());
+            return new ProfileDTO(entity);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Id (" + id + ") not found.");
         }

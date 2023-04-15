@@ -14,12 +14,6 @@ import java.net.URI;
 public class UserController {
     @Autowired
     private UserService service;
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
-        UserDTO dto = service.findById(id);
-        return ResponseEntity.ok().body(dto);
-    }
     @PostMapping
     public ResponseEntity<UserDTO> insert(@RequestBody UserDTO dto) {
         dto = service.insert(dto);
