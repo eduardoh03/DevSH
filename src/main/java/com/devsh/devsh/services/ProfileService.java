@@ -28,8 +28,8 @@ public class ProfileService {
     @Transactional(readOnly = true)
     public ProfileDTO findById(Long id) {
         Optional<Profile> obj = repository.findById(id);
-        Profile entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not Found."));
-        return new ProfileDTO(entity.getId(), entity.getName(), entity.getImgUrl());
+        Profile entity = obj.orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
+        return new ProfileDTO(entity);
     }
 
     @Transactional
@@ -38,7 +38,7 @@ public class ProfileService {
         copyDtoToEntity(dto, entity);
         entity.setUser(new User(userId, null, null));
         entity = repository.save(entity);
-        return new ProfileDTO(entity.getId(), entity.getName(), entity.getImgUrl());
+        return new ProfileDTO(entity);
     }
 
     @Transactional

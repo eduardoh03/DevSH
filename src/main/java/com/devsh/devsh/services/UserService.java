@@ -1,4 +1,5 @@
 package com.devsh.devsh.services;
+import com.devsh.devsh.dto.ProfileDTO;
 import com.devsh.devsh.dto.UserDTO;
 import com.devsh.devsh.entities.User;
 import com.devsh.devsh.repositories.UserRepository;

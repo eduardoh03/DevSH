@@ -8,11 +8,11 @@ public class TokenJWTDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private final String type = "Bearer ";
     private String token;
-    private Long user_id;
+    private Long profile_id;
 
-    public TokenJWTDTO(String token, Long user_id) {
+    public TokenJWTDTO(String token, Long profile_id) {
         this.token = token;
-        this.user_id = user_id;
+        this.profile_id = profile_id;
     }
 
     public String getType() {
@@ -23,7 +23,7 @@ public class TokenJWTDTO implements Serializable {
         return token;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getProfile_id() {
+        return profile_id;
     }
 }

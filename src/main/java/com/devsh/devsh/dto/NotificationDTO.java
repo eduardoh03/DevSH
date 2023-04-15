@@ -1,6 +1,4 @@
 package com.devsh.devsh.dto;
-import com.devsh.devsh.entities.Notification;
-import org.aspectj.weaver.ast.Not;
 
 import java.io.Serial;
 import java.io.Serializable;
