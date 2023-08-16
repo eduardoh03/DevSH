@@ -1,37 +1,30 @@
 package com.devsh.devsh.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
-@Table(name = "tb_users")
+@Table(name = "tb_user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    @Email @NotNull @NotBlank @NotEmpty
     private String login;
-    @NotNull @NotBlank @NotEmpty
     private String password;
 
     @OneToOne(mappedBy = "user")
     private Profile profile;
 
-    public Profile getProfile() {
-        return profile;
-    }
+    @ManyToMany
+    @JoinTable(name = "tb_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -56,6 +49,25 @@ public class User implements UserDetails {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public boolean hasRole(String roleName) {
+        for (Role role : roles) {
+            if (role.getAuthority().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -82,7 +94,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return roles;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.devsh.devsh.infra.exceptions;
 
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.devsh.devsh.services.exceptions.AuthorizationErrorException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import com.devsh.devsh.services.exceptions.ResourceNotFoundException;
@@ -61,29 +59,6 @@ public class ResourceExceptionHandler {
         err.setTimestamp(Instant.now());
         err.setStatus(status.value());
         err.setError("Bad Request");
-        err.setMessage(e.getMessage());
-        err.setPath(request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
-    @ExceptionHandler(JWTCreationException.class)
-    public ResponseEntity<StandardError> JwtCreateError(JWTCreationException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        StandardError err = new StandardError();
-        err.setTimestamp(Instant.now());
-        err.setStatus(status.value());
-        err.setError("Error with JWT Token.");
-        err.setMessage(e.getMessage());
-        err.setPath(request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
-
-    @ExceptionHandler(JWTDecodeException.class)
-    public ResponseEntity<StandardError> JwtDecodeError(JWTDecodeException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.UNAUTHORIZED;
-        StandardError err = new StandardError();
-        err.setTimestamp(Instant.now());
-        err.setStatus(status.value());
-        err.setError("Error with JWT Token. Unauthorized.");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(status).body(err);

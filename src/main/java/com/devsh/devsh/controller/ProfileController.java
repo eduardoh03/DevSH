@@ -2,6 +2,7 @@ package com.devsh.devsh.controller;
 
 import com.devsh.devsh.dto.ProfileDTO;
 import com.devsh.devsh.dto.UserDTO;
+import com.devsh.devsh.dto.UserInsertDTO;
 import com.devsh.devsh.services.ProfileService;
 import com.devsh.devsh.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,11 @@ public class ProfileController {
     public ResponseEntity<ProfileDTO> insert(@RequestBody ProfileDTO dto) {
 
         UserDTO userDTO = dto.getUser();
+        UserInsertDTO userInsertDTO = new UserInsertDTO();
+        userInsertDTO.setLogin(userDTO.getLogin());
+        userInsertDTO.setPassword("123456");
         try {
-            userDTO = userService.insert(userDTO);
+            userDTO = userService.insert(userInsertDTO);
             dto = service.insert(dto, userDTO.getId());
         } catch (DataIntegrityViolationException e){
             throw new IllegalArgumentException("Username invalid or already registered!");

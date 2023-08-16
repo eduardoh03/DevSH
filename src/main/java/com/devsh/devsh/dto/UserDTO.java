@@ -1,26 +1,19 @@
 package com.devsh.devsh.dto;
 
 import com.devsh.devsh.entities.User;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserDTO implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Email(message = "Favor entrar com um email válido")
     private String login;
-    private String password;
+    Set<RoleDTO> roles = new HashSet<>();
 
     public UserDTO() {
-    }
-
-    public UserDTO(Long id, String login, String password) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
     }
 
     public UserDTO(Long id, String login) {
@@ -31,7 +24,7 @@ public class UserDTO implements Serializable {
     public UserDTO(User entity) {
         this.id = entity.getId();
         this.login = entity.getLogin();
-        this.password = entity.getPassword();
+        entity.getRoles().forEach(role -> this.roles.add(new RoleDTO(role)));
     }
 
     public Long getId() {
@@ -50,11 +43,7 @@ public class UserDTO implements Serializable {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public Set<RoleDTO> getRoles() {
+        return roles;
     }
 }
